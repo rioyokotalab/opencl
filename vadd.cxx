@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
@@ -9,6 +10,12 @@
 
 #define MEM_SIZE (128)
 #define MAX_SOURCE_SIZE (0x100000)
+
+double get_time() {
+  struct timeval tv;
+  gettimeofday(&tv,NULL);
+  return (double)(tv.tv_sec+tv.tv_usec*1e-6);
+}
 
 int main() {
   cl_platform_id platform_id = NULL;
@@ -29,6 +36,9 @@ int main() {
   size_t source_size;
   char *source_str;
   cl_int i;
+  double tic, toc;
+
+  tic = get_time();
 
   /* カーネルを含むソースコードをロード */
   fp = fopen(fileName, "r");
@@ -98,6 +108,7 @@ int main() {
 
   free(h_a);
   free(source_str);
-
+  toc = get_time();
+  printf("Execution Time: %e s\n",toc-tic);
   return 0;
 }

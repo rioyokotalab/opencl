@@ -8,6 +8,9 @@ CXX = g++ -Wall -O3 -fopenmp -mavx -ffast-math -funroll-loops
 .cxx.o	:
 	$(CXX) -c $? -o $@
 
+device: device.o
+	$(CXX) $? -lOpenCL
+	./a.out
 platform: platform.o
 	$(CXX) $? -lOpenCL
 	./a.out
